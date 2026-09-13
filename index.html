@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador Hipotecari - Viabilitat, Quotes i Amortització</title>
+  <meta name="description" content="Simulador d'hipoteques a tipus fix amb sistema francès, anàlisi de viabilitat financera (regla del 35%), despeses de compravenda a Catalunya i taula interactiva amb amortitzacions voluntàries.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Estils CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/table.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Capçalera Corporativa Digital Banking -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">🏠</div>
+        <div class="brand-text">
+          <h1>Simulador Hipotecari</h1>
+          <p class="subtitle">Viabilitat financera, quotes i amortització segons la fiscalitat de Catalunya</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <span class="header-tag">🔒 100% Local & Privat</span>
+        <span class="header-tag">🏛️ Sistema Francès</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Graella de Configuració i Resultats -->
+    <main class="main-grid">
+      
+      <!-- Columna Esquerra: Paràmetres del Formulari -->
+      <section class="card" aria-label="Paràmetres de la hipoteca">
+        <div class="card-header">
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            Dades de la Compravenda
+          </h2>
+          <span class="badge badge-info">Tipus Fix</span>
+        </div>
+
+        <form id="mortgageForm" class="form-section" onsubmit="event.preventDefault();">
+          
+          <!-- Preu de la vivenda -->
+          <div class="form-group">
+            <div class="form-label-row">
+              <label for="inputPrice" class="form-label">Preu de la Vivenda</label>
+              <span class="form-label-hint">Valor d'adquisició</span>
+            </div>
+            <div class="input-with-adornment">
+              <input type="number" id="inputPrice" class="form-control has-right-adornment" value="200000" min="20000" max="2000000" step="5000">
+              <span class="input-adornment-right">€</span>
+            </div>
+            <div class="range-slider-container">
+              <input type="range" id="sliderPrice" class="range-slider" min="50000" max="1000000" step="5000" value="200000">
+            </div>
+            <div class="slider-ticks">
+              <span>50k €</span>
+              <span>500k €</span>
+              <span>1M €</span>
+            </div>
+          </div>
+
+          <!-- Diners propis / Estalvis aportats (Valor Absolut en €) -->
+          <div class="form-group">
+            <div class="form-label-row">
+              <label for="inputFunds" class="form-label">
+                Diners Propis / Estalvis Aportats
+                <span class="tooltip-trigger" title="Total d'estalvis que destines a l'operació. Han de cobrir com a mínim el 20% d'entrada del pis més les despeses i impostos (~10-12%).">ⓘ</span>
+              </label>
+              <span id="fundsPctDisplay" class="text-primary font-bold">32.5% del pis</span>
+            </div>
+            <div class="input-with-adornment">
+              <input type="number" id="inputFunds" class="form-control has-right-adornment" value="65000" min="5000" max="1500000" step="1000">
+              <span class="input-adornment-right">€</span>
+            </div>
+            <div class="range-slider-container">
+              <input type="range" id="sliderFunds" class="range-slider" min="10000" max="300000" step="2500" value="65000">
+            </div>
+            <div class="slider-ticks">
+              <span>10k €</span>
+              <span>150k €</span>
+              <span>300k €</span>
+            </div>
+          </div>
+
+          <!-- Tipus d'interès TAE / TIN -->
+          <div class="form-group">
+            <div class="form-label-row">
+              <label for="inputInterest" class="form-label">
+                Interès Anual (TAE / TIN)
+                <span class="tooltip-trigger" title="Tipus d'interès nominal aplicat al préstec. El TIN és el tipus contractual utilitzat per calcular la quota mensual mitjançant la fórmula francesa. El TAE reflecteix el cost total anual.">ⓘ</span>
+              </label>
+              <span class="form-label-hint">Anual</span>
+            </div>
+            <div class="input-with-adornment">
+              <input type="number" id="inputInterest" class="form-control has-right-adornment" value="3.0" min="0.1" max="15.0" step="0.05">
+              <span class="input-adornment-right">%</span>
+            </div>
+            <div class="range-slider-container">
+              <input type="range" id="sliderInterest" class="range-slider" min="0.5" max="8.0" step="0.1" value="3.0">
+            </div>
+            <div class="slider-ticks">
+              <span>0.5%</span>
+              <span>4.0%</span>
+              <span>8.0%</span>
+            </div>
+          </div>
+
+          <!-- Termini en Anys -->
+          <div class="form-group">
+            <div class="form-label-row">
+              <label for="inputYears" class="form-label">
+                Termini d'Amortització
+                <span class="tooltip-trigger" title="El número màxim permès habitual és de 40 anys.">ⓘ</span>
+              </label>
+              <span class="form-label-hint">Màx. 40 anys</span>
+            </div>
+            <div class="input-with-adornment">
+              <input type="number" id="inputYears" class="form-control has-right-adornment" value="30" min="1" max="40" step="1">
+              <span class="input-adornment-right">Anys</span>
+            </div>
+            <div class="range-slider-container">
+              <input type="range" id="sliderYears" class="range-slider" min="5" max="40" step="1" value="30">
+            </div>
+            <div class="slider-ticks">
+              <span>5 anys</span>
+              <span>20 anys</span>
+              <span>40 anys</span>
+            </div>
+          </div>
+
+          <!-- Règim d'Impostos (Catalunya) -->
+          <div class="form-group">
+            <label class="form-label">
+              Impostos de Compravenda (Catalunya)
+              <span class="tooltip-trigger" title="Tributació a Catalunya: ITP General (10%), ITP Reduït (5%) per a joves o col·lectius bonificats, o Obra Nova (10% IVA + 1,5% AJD).">ⓘ</span>
+            </label>
+            <div class="tax-selector-grid">
+              <div class="tax-card-option active" data-tax-type="itp_general">
+                <div class="tax-card-title">
+                  <span>ITP General</span>
+                  <span class="tax-card-rate">10%</span>
+                </div>
+                <p class="tax-card-desc">Segona mà estàndard a Catalunya</p>
+              </div>
+
+              <div class="tax-card-option" data-tax-type="itp_reduced">
+                <div class="tax-card-title">
+                  <span>ITP Reduït</span>
+                  <span class="tax-card-rate">5%</span>
+                </div>
+                <p class="tax-card-desc">Joves ≤32/35 anys, família nombrosa...</p>
+              </div>
+
+              <div class="tax-card-option" data-tax-type="new_home" style="grid-column: 1 / -1;">
+                <div class="tax-card-title">
+                  <span>Obra Nova (IVA + AJD)</span>
+                  <span class="tax-card-rate">11,5%</span>
+                </div>
+                <p class="tax-card-desc">Habitatge nou: 10% IVA + 1,5% Actes Jurídics Documentats</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desglossament de despeses -->
+          <div>
+            <button type="button" id="btnToggleExpenses" class="breakdown-toggle">
+              <span class="toggle-icon">▼</span> Veure desglossament de despeses i impostos
+            </button>
+            <div id="expensesBreakdownBox" class="expenses-breakdown-box" style="display: none;">
+              <div class="expenses-item">
+                <span id="expTaxName">ITP (10%)</span>
+                <strong id="expTaxAmount">20.000 €</strong>
+              </div>
+              <div class="expenses-item">
+                <span>Notaria (aranzel regulat)</span>
+                <strong id="expNotary">760 €</strong>
+              </div>
+              <div class="expenses-item">
+                <span>Registre de la Propietat</span>
+                <strong id="expRegistry">450 €</strong>
+              </div>
+              <div class="expenses-item">
+                <span>Gestoria</span>
+                <strong id="expGestoria">400 €</strong>
+              </div>
+              <div class="expenses-item">
+                <span>Taxació homologada</span>
+                <strong id="expAppraisal">320 €</strong>
+              </div>
+              <div class="expenses-item total">
+                <span>Total Impostos + Despeses</span>
+                <strong id="expTotal" class="text-primary">21.930 €</strong>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin: 0.5rem 0;">
+
+          <!-- Dades opcionals de viabilitat salarial -->
+          <div class="form-group">
+            <div class="form-label-row">
+              <label for="inputSalary" class="form-label">
+                Salari Net Mensual (Opcional)
+                <span class="tooltip-trigger" title="Comprova si la quota mensual supera el 35% del teu sou net (regla prudencial del Banc d'Espanya).">ⓘ</span>
+              </label>
+              <span class="form-label-hint">Regla del 35%</span>
+            </div>
+            <div class="input-with-adornment">
+              <input type="number" id="inputSalary" class="form-control has-right-adornment" placeholder="Ex: 2.200" step="50">
+              <span class="input-adornment-right">€/mes</span>
+            </div>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- Columna Dreta: Viabilitat, Mètriques Clau i Gràfics -->
+      <section class="results-column" aria-label="Resultats i viabilitat">
+        
+        <!-- Targeta / Banner de Viabilitat -->
+        <div id="viabilityBanner" class="viability-banner viable">
+          <div class="viability-header">
+            <div class="viability-title-wrap">
+              <div class="viability-icon">✓</div>
+              <h2 id="viabilityTitle" class="viability-status-text">Hipoteca Viable</h2>
+            </div>
+          </div>
+          
+          <div id="viabilityBody" class="viability-body">
+            <!-- Emplenat dinàmicament per JS -->
+          </div>
+
+          <div class="viability-meters">
+            <div class="meter-card">
+              <div class="meter-header">
+                <span>Ràtio d'Esforç (DSTI)</span>
+                <span id="meterDstiVal" class="meter-value">—</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div id="meterDstiFill" class="progress-bar-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="meter-card">
+              <div class="meter-header">
+                <span>Diners Propis vs Mínim</span>
+                <span id="meterFundsVal" class="meter-value">—</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div id="meterFundsFill" class="progress-bar-fill" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Targetes de Mètriques Clau (KPIs) -->
+        <div class="kpi-grid">
+          <div class="kpi-card highlight">
+            <span class="kpi-card-label">
+              Quota Mensual
+              <span class="tooltip-trigger" title="Quota calculada mitjançant el sistema francès d'amortització.">ⓘ</span>
+            </span>
+            <div id="kpiMonthlyQuota" class="kpi-card-value">661,54 €</div>
+            <span id="kpiObligatoryQuota" class="kpi-card-subtext">Obligada: 661,54 €</span>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-card-label">Capital Prestat</span>
+            <div id="kpiLoanAmount" class="kpi-card-value">156.930 €</div>
+            <span class="kpi-card-subtext">Finançament bancari</span>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-card-label">Total Interessos</span>
+            <div id="kpiTotalInterest" class="kpi-card-value">81.252 €</div>
+            <span class="kpi-card-subtext">Pagats al banc</span>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-card-label">Mínim Diners Propis</span>
+            <div id="kpiFundsNeeded" class="kpi-card-value">61.930 €</div>
+            <span id="kpiFundsNeededPct" class="kpi-card-subtext text-warning font-bold">Mín. 31% del pis</span>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-card-label">Cost Total Operació</span>
+            <div id="kpiTotalCost" class="kpi-card-value">260.112 €</div>
+            <span class="kpi-card-subtext">Immoble + Interessos + Impostos</span>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-card-label">Ràtio d'Endeutament</span>
+            <div id="kpiDstiRatio" class="kpi-card-value">—</div>
+            <span class="kpi-card-subtext">Límit recomanat: 35%</span>
+          </div>
+        </div>
+
+        <!-- Gràfics Interactius -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3 class="chart-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+              </svg>
+              Distribució de Costos
+            </h3>
+            <div class="chart-canvas-wrapper">
+              <canvas id="donutChartCanvas"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+              Evolució del Deute vs Patrimoni
+            </h3>
+            <div class="chart-canvas-wrapper">
+              <canvas id="evolutionChartCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Secció de la Taula d'Amortització Anual -->
+    <section class="full-width-section table-section" aria-label="Taula d'amortització">
+      
+      <div class="table-toolbar">
+        <div class="table-toolbar-left">
+          <h2 class="table-toolbar-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="3" y1="15" x2="21" y2="15"></line>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+              <line x1="15" y1="3" x2="15" y2="21"></line>
+            </svg>
+            Quadre d'Amortització Interactiu (Any a Any)
+          </h2>
+          <p class="table-toolbar-desc">
+            A la columna <strong>Quota</strong> pots fixar quotes superiors a la <strong>Quota Obligada</strong> per accelerar el pagament quan el deute baixa, o afegir <strong>Amortitzacions Voluntàries</strong> extraordinàries.
+          </p>
+        </div>
+
+        <div class="table-toolbar-actions">
+          <button id="btnKeepInitialQuota" class="btn btn-outline btn-sm" title="Mantingues la quota inicial durant tota la hipoteca per escurçar anys">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+            Mantenir Quota Inicial
+          </button>
+          <button id="btnBatchAmortization" class="btn btn-outline btn-sm" title="Aplica una amortització extraordinària anual">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            Aportació Recurrent
+          </button>
+          <button id="btnClearAmortizations" class="btn btn-outline btn-sm" title="Neteja totes les quotes personalitzades i amortitzacions">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Restablir Taula
+          </button>
+          <button id="btnExportCsv" class="btn btn-outline btn-sm" title="Descarrega la taula en format CSV / Excel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Exportar CSV
+          </button>
+          <button id="btnPrint" class="btn btn-primary btn-sm" title="Imprimeix o desa en PDF">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Imprimir / PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenidor dinàmic de la taula -->
+      <div id="tableContainer">
+        <!-- Renderitzat per table-renderer.js -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Modal per a Aportacions Recurrents -->
+  <div id="batchModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Simular Amortització Recurrent</h3>
+        <button id="btnCloseModal" class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Aplica automàticament una quantitat d'amortització extraordinària a finals de cada any en el rang seleccionat.
+        </p>
+        <div class="form-group">
+          <label for="batchAmountInput" class="form-label">Quantitat Anual a Amortitzar</label>
+          <div class="input-with-adornment">
+            <input type="number" id="batchAmountInput" class="form-control has-right-adornment" value="3000" step="500" min="100">
+            <span class="input-adornment-right">€/any</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="batchStartYearInput" class="form-label">Des de l'Any</label>
+            <input type="number" id="batchStartYearInput" class="form-control" value="1" min="1" max="40">
+          </div>
+          <div class="form-group">
+            <label for="batchEndYearInput" class="form-label">Fins a l'Any</label>
+            <input type="number" id="batchEndYearInput" class="form-control" value="30" min="1" max="40">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnCancelModal" class="btn btn-outline">Cancel·lar</button>
+        <button id="btnApplyBatchAmort" class="btn btn-primary">Aplicar Amortitzacions</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controlador de l'aplicació -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+/* ==========================================================================
+   SIMULADOR HIPOTECARI - COMPONENTS I FORMULARIS
+   Estil corporatiu Digital Banking (Jordi Marias)
+   ========================================================================== */
+
+/* Formularis i Grups */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--navy-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.form-label-hint {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+}
+
+.input-with-adornment {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-adornment-left {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.input-adornment-right {
+  position: absolute;
+  right: 1rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  pointer-events: none;
+  font-size: 0.875rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 0 3px rgba(0, 126, 168, 0.15);
+}
+
+.form-control.has-left-adornment {
+  padding-left: 2.25rem;
+}
+
+.form-control.has-right-adornment {
+  padding-right: 2.5rem;
+}
+
+/* Sliders de Rang */
+.range-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.35rem;
+}
+
+.range-slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #e2e8f0;
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue-accent);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 126, 168, 0.4);
+  border: 2px solid white;
+  transition: transform var(--transition);
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: var(--blue-accent-hover);
+}
+
+.range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue-accent);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 126, 168, 0.4);
+  border: 2px solid white;
+  transition: transform var(--transition);
+}
+
+.slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+
+/* Selector d'impostos */
+.tax-selector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+@media (max-width: 480px) {
+  .tax-selector-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tax-card-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.875rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tax-card-option:hover {
+  border-color: var(--blue-accent);
+  background: var(--blue-subtle);
+}
+
+.tax-card-option.active {
+  border-color: var(--blue-accent);
+  background: var(--blue-light-bg);
+  box-shadow: 0 0 0 1px var(--blue-accent);
+}
+
+.tax-card-title {
+  font-size: 0.825rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--navy-primary);
+}
+
+.tax-card-rate {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--blue-accent);
+  background: rgba(0, 126, 168, 0.12);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.tax-card-desc {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  line-height: 1.35;
+}
+
+/* Desplegable de despeses */
+.breakdown-toggle {
+  background: none;
+  border: none;
+  color: var(--blue-accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+  transition: var(--transition);
+}
+
+.breakdown-toggle:hover {
+  color: var(--blue-accent-hover);
+}
+
+.expenses-breakdown-box {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.expenses-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-secondary);
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.expenses-item.total {
+  font-weight: 700;
+  color: var(--navy-primary);
+  border-bottom: none;
+  padding-top: 0.25rem;
+  font-size: 0.925rem;
+}
+
+/* Panell de Viabilitat */
+.viability-banner {
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.viability-banner.viable {
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.viability-banner.warning {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-border);
+}
+
+.viability-banner.unviable {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-border);
+}
+
+.viability-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.viability-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.viability-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.viable .viability-icon {
+  background: #d1fae5;
+  color: var(--status-success);
+}
+
+.warning .viability-icon {
+  background: #fef3c7;
+  color: var(--status-warning);
+}
+
+.unviable .viability-icon {
+  background: #fee2e2;
+  color: var(--status-danger);
+}
+
+.viability-status-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.viable .viability-status-text { color: var(--status-success); }
+.warning .viability-status-text { color: var(--status-warning); }
+.unviable .viability-status-text { color: var(--status-danger); }
+
+.viability-body {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.viability-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .viability-meters {
+    grid-template-columns: 1fr;
+  }
+}
+
+.meter-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 43, 73, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.775rem;
+  color: var(--text-muted);
+}
+
+.meter-value {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Targetes de Mètriques Clau (KPIs) */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.kpi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.kpi-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.kpi-card.highlight {
+  background: linear-gradient(135deg, var(--blue-subtle) 0%, #e0f2fe 100%);
+  border-color: rgba(0, 126, 168, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 126, 168, 0.1);
+}
+
+.kpi-card-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.kpi-card-value {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--navy-primary);
+  line-height: 1.2;
+}
+
+.kpi-card.highlight .kpi-card-value {
+  color: var(--blue-accent);
+}
+
+.kpi-card-subtext {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Gràfics */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 840px) {
+  .charts-grid {
+    grid-template-columns: 340px 1fr;
+  }
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chart-canvas-wrapper {
+  position: relative;
+  height: 240px;
+  width: 100%;
+}
+
+/* Botons Corporatius */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--blue-accent);
+  color: var(--text-white);
+  box-shadow: 0 2px 4px rgba(0, 126, 168, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: var(--blue-accent-hover);
+  box-shadow: 0 4px 8px rgba(0, 126, 168, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background-color: var(--bg-card);
+  border-color: #cbd5e1;
+  color: var(--navy-primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--bg-card-subtle);
+  border-color: var(--blue-accent);
+  color: var(--blue-accent);
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}

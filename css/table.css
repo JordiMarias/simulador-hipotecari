@@ -1,0 +1,299 @@
+/* ==========================================================================
+   SIMULADOR HIPOTECARI - TAULA D'AMORTITZACIÓ I ESTILS D'IMPRESSIÓ
+   Estil corporatiu Digital Banking (Jordi Marias)
+   ========================================================================== */
+
+.table-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.table-toolbar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.table-toolbar-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--navy-primary);
+}
+
+.table-toolbar-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.table-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Contenidor de la Taula */
+.table-responsive-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+  max-height: 700px;
+  position: relative;
+}
+
+.amortization-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+  font-size: 0.875rem;
+  min-width: 1050px;
+}
+
+.amortization-table th {
+  background: var(--bg-card-subtle);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.875rem 1rem;
+  border-bottom: 2px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.amortization-table th.text-center,
+.amortization-table td.text-center {
+  text-align: center;
+}
+
+.amortization-table th.text-left,
+.amortization-table td.text-left {
+  text-align: left;
+}
+
+.amortization-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  transition: background-color 0.15s ease;
+}
+
+.amortization-table tbody tr:hover td {
+  background-color: var(--blue-subtle);
+}
+
+.amortization-table tbody tr.row-paid-off td {
+  opacity: 0.45;
+  background-color: #fafafa;
+}
+
+.amortization-table tbody tr.row-payoff-event td {
+  background-color: var(--status-success-bg);
+  border-top: 1px solid var(--status-success-border);
+  border-bottom: 1px solid var(--status-success-border);
+  font-weight: 600;
+}
+
+.amortization-table tfoot td {
+  background: var(--bg-card-subtle);
+  font-weight: 700;
+  color: var(--navy-primary);
+  border-top: 2px solid #cbd5e1;
+  padding: 1rem;
+  font-size: 0.925rem;
+}
+
+/* Input d'amortització i quota a la taula */
+.table-input-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 130px;
+}
+
+.table-input {
+  width: 100%;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  font-weight: 600;
+  background: var(--bg-input);
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  text-align: right;
+  transition: var(--transition);
+}
+
+.table-input:focus {
+  outline: none;
+  border-color: var(--blue-accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(0, 126, 168, 0.2);
+}
+
+.table-input.has-value {
+  background: var(--blue-light-bg);
+  border-color: var(--blue-accent);
+  color: var(--blue-accent);
+  font-weight: 700;
+}
+
+/* Modal d'amortització massiva */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 480px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(15px);
+  transition: transform 0.2s ease;
+}
+
+.modal-overlay.active .modal-card {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy-primary);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: var(--transition);
+}
+
+.modal-close:hover {
+  color: var(--navy-primary);
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Caixa de resum d'estalvi amb amortització */
+.savings-summary-box {
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.savings-summary-box .highlight-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--status-success);
+}
+
+/* Estils d'impressió */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .app-header,
+  .table-toolbar-actions,
+  .range-slider-container,
+  .btn,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  .app-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .card, .table-responsive-container {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    max-height: none !important;
+    background: white !important;
+  }
+
+  .amortization-table th {
+    background: #f1f5f9 !important;
+    color: black !important;
+  }
+
+  .amortization-table td {
+    color: black !important;
+  }
+}
